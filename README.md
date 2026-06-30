@@ -122,16 +122,3 @@ python -m inmotion_mcp.server --help           # CLI
 ```
 
 Tool registration and the request/format logic are exercised end-to-end against a mocked HTTP layer (see the smoke test in the build notes); all 10 tools register with correct schemas and annotations.
-
----
-
-## Notes for interviews
-
-This server is the concrete artifact behind the CV line *"built and operate a production MCP server connecting the model to internal data sources (Notion, n8n, Gmail) and exposing custom Python tools to the agent layer."* Talking points that hold up under scrutiny:
-
-- **What MCP is and why**: a standard protocol that lets an LLM client call your tools; you built the server side. The value is a *controlled* tool surface over sensitive systems rather than raw API keys in the model's hands.
-- **Engineering decisions**: single shared async client (DRY), Pydantic-validated inputs, normalised actionable errors, read/write annotations, markdown-vs-JSON output, graceful per-service degradation.
-- **Safety**: drafts not sends; destructive operations flagged via annotations.
-- **Transport**: stdio for local (Claude Desktop), streamable HTTP for remote.
-
-Be precise about scope: this is a focused 10-tool integration server, not a framework. That's the honest and strong framing.
